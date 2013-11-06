@@ -7,6 +7,7 @@ describe('integration-tester', function () {
   var Integration = createIntegration('Name')
     .global('global')
     .option('option', 'value')
+    .option('object', {})
     .assumesPageview()
     .readyOnLoad();
 
@@ -15,6 +16,7 @@ describe('integration-tester', function () {
     assert(integration)
       .global('global')
       .option('option', 'value')
+      .option('object', {})
       .assumesPageview()
       .readyOnLoad();
   });

@@ -1,6 +1,8 @@
 
 var assert = require('assert');
+var equal = require('equals');
 var indexOf = require('indexof');
+var is = require('is');
 
 
 /**
@@ -65,8 +67,9 @@ Tester.prototype.global = function (key) {
 
 Tester.prototype.option = function (key, value) {
   var val = this.integration.defaults[key];
+  var obj = is.object(val) || is.array(val);
   assert(
-    val === value,
+    obj ? equal(val, value) : val === value,
     'Expected option "' + key + '" to be "' + value + '", but it was "'+ val + '".'
   );
   return this;
