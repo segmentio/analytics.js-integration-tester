@@ -1,4 +1,3 @@
-
 # analytics.js-integration-tester
 
   Helper to quickly test an analytics.js integration.
@@ -12,7 +11,7 @@
 ```js
 var assert = require('integration-tester');
 
-assert(Integration)
+assert(integration)
   .name('Custom')
   .global('_custom')
   .readyOnInitialize()
