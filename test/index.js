@@ -203,8 +203,9 @@ describe('integration-tester', function () {
       it('should not throw and delete the spy if assertion is correct', function(){
         var proxy = sinon.spy(function(){});
         proxy('baz');
-        assertion.called(proxy).with('baz');
+        var ret = assertion.called(proxy).with('baz');
         assert(!assertion.hasOwnProperty('spy'));
+        assert(ret == assertion);
       })
     })
 
