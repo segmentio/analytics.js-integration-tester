@@ -6,13 +6,22 @@
   "license": "MIT",
   "keywords": ["integration", "tester"],
   "dependencies": {
+    "segmentio/facade": "0.2.0",
     "component/assert": "*",
     "component/indexof": "*",
     "ianstormtaylor/is": "*",
+    "component/each": "*",
+    "ianstormtaylor/sinon": "*",
     "jkroso/equals": "*"
   },
   "development": {
-    "segmentio/analytics.js-integration": "*"
+    "segmentio/analytics.js-integration": "*",
+    "component/assert": "*"
   },
-  "scripts": ["index.js"]
+  "main": "lib/index.js",
+  "scripts": [
+    "lib/index.js",
+    "lib/assertion.js",
+    "lib/types.js"
+  ]
 }

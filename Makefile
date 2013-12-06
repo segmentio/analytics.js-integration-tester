@@ -1,5 +1,7 @@
 
-build: components index.js
+SRC= $(wildcard lib/*.js)
+
+build: components $(SRC)
 	@component build --dev
 
 components: component.json
