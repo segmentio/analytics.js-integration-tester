@@ -12,7 +12,8 @@
     "ianstormtaylor/is": "*",
     "component/each": "*",
     "ianstormtaylor/sinon": "*",
-    "jkroso/equals": "*"
+    "jkroso/equals": "*",
+    "yields/fmt": "*"
   },
   "development": {
     "segmentio/analytics.js-integration": "*",
