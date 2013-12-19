@@ -6,7 +6,7 @@
   "license": "MIT",
   "keywords": ["integration", "tester"],
   "dependencies": {
-    "segmentio/facade": "0.2.0",
+    "segmentio/facade": "0.2.1",
     "component/assert": "*",
     "component/indexof": "*",
     "ianstormtaylor/is": "*",
