@@ -1,3 +1,8 @@
+
+0.1.1 - December 18, 2013
+-------------------------
+ * update facade
+
 0.1.0 - December 12, 2013
 -------------------------
 * add facade helpers
