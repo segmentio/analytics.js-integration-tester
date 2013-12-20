@@ -47,9 +47,9 @@ describe('integration-tester', function () {
     it('should call integration with correct Identify', function(){
       tester(integration).identify('baz', { trait: true });
       var identify = integration.identify.args[0][0];
-      tester(identify instanceof Identify);
-      tester('baz' == identify.userId());
-      tester(true == identify.traits().trait);
+      assert(identify instanceof Identify);
+      assert('baz' == identify.userId());
+      assert(true == identify.traits().trait);
     })
   })
 
@@ -70,9 +70,9 @@ describe('integration-tester', function () {
     it('should call integration with correct Identify', function(){
       tester(integration).group('baz', { prop: true });
       var group = integration.group.args[0][0];
-      tester(group instanceof Group);
-      tester('baz' == group.groupId());
-      tester(true == group.properties().prop);
+      assert(group instanceof Group);
+      assert('baz' == group.groupId());
+      assert(true == group.properties().prop);
     })
   })
 
@@ -87,15 +87,15 @@ describe('integration-tester', function () {
 
     it('should call #track on integration with Track', function(){
       tester(integration).track('event', { prop: true });
-      integration.track.calledWithNew(Track);
+      assert(integration.track.args[0][0] instanceof Track);
     })
 
     it('should call integration with correct Identify', function(){
       tester(integration).track('event', { prop: true });
       var track = integration.track.args[0][0];
-      tester(track instanceof Track);
-      tester('event' == track.event());
-      tester(true == track.properties().prop);
+      assert(track instanceof Track);
+      assert('event' == track.event());
+      assert(true == track.properties().prop);
     })
   })
 
@@ -111,15 +111,15 @@ describe('integration-tester', function () {
 
     it('should call #alias on integration with Alias', function(){
       tester(integration).alias('from', 'to');
-      integration.alias.calledWithNew(Alias);
+      assert(integration.alias.args[0][0] instanceof Alias);
     })
 
     it('should call integration with correct Alias', function(){
       tester(integration).alias('from', 'to');
       var alias = integration.alias.args[0][0];
-      tester(alias instanceof Alias);
-      tester('from' == alias.from());
-      tester('to' == alias.to());
+      assert(alias instanceof Alias);
+      assert('from' == alias.to());
+      assert('to' == alias.from());
     })
   })
 
@@ -135,16 +135,30 @@ describe('integration-tester', function () {
 
     it('should call #page on integration with Page', function(){
       tester(integration).page();
-      integration.page.calledWithNew(Page);
+      assert(integration.page.args[0][0] instanceof Page);
     })
 
     it('should call integration with correct Page', function(){
       tester(integration).page('category', 'name', {});
       var page = integration.page.args[0][0];
-      tester(page instanceof Page);
-      tester('category' == page.category());
-      tester('name' == page.name());
-      tester('object' == typeof page.properties());
+      assert(page instanceof Page);
+      assert('category' == page.category());
+      assert('name' == page.name());
+      assert('object' == typeof page.properties());
+    })
+  })
+
+  describe('.initialize()', function(){
+    var integration;
+
+    beforeEach(function(){
+      integration = new Integration;
+      integration.initialize = sinon.spy();
+    })
+
+    it('should call initialize', function(){
+      tester(integration).initialize();
+      assert(integration.initialize.called);
     })
   })
 
