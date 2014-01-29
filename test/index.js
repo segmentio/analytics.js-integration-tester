@@ -30,6 +30,15 @@ describe('integration-tester', function () {
       .readyOnLoad();
   });
 
+  it('should expose facade\'s methods on .types', function(){
+    assert(tester.types);
+    assert(tester.types.identify);
+    assert(tester.types.group);
+    assert(tester.types.track);
+    assert(tester.types.alias);
+    assert(tester.types.page);
+  })
+
   describe('.identify(id, traits)', function(){
     var integration;
 
