@@ -60,6 +60,12 @@ describe('integration-tester', function () {
       assert('baz' == identify.userId());
       assert(true == identify.traits().trait);
     })
+
+    it('should keep the returned value on `.ret`', function(){
+      integration.identify = Function('return 1');
+      var assertion = tester(integration).identify('baz', { trait: true });
+      assert(1 == assertion.ret);
+    })
   })
 
   describe('.group(id, traits)', function(){
@@ -83,6 +89,12 @@ describe('integration-tester', function () {
       assert('baz' == group.groupId());
       assert(true == group.properties().prop);
     })
+
+    it('should keep the returned value on `.ret`', function(){
+      integration.group = Function('return 1');
+      var assertion = tester(integration).group('baz', { trait: true });
+      assert(1 == assertion.ret);
+    })
   })
 
   describe('.track(event, props)', function(){
@@ -105,6 +117,12 @@ describe('integration-tester', function () {
       assert(track instanceof Track);
       assert('event' == track.event());
       assert(true == track.properties().prop);
+    })
+
+    it('should keep the returned value on `.ret`', function(){
+      integration.track = Function('return 1');
+      var assertion = tester(integration).track('event', { prop: true });
+      assert(1 == assertion.ret);
     })
   })
 
@@ -130,6 +148,12 @@ describe('integration-tester', function () {
       assert('from' == alias.to());
       assert('to' == alias.from());
     })
+
+    it('should keep the returned value on `.ret`', function(){
+      integration.alias = Function('return 1');
+      var assertion = tester(integration).alias('1', '2');
+      assert(1 == assertion.ret);
+    })
   })
 
 
@@ -154,6 +178,12 @@ describe('integration-tester', function () {
       assert('category' == page.category());
       assert('name' == page.name());
       assert('object' == typeof page.properties());
+    })
+
+    it('should keep the returned value on `.ret`', function(){
+      integration.page = Function('return 1');
+      var assertion = tester(integration).page();
+      assert(1 == assertion.ret);
     })
   })
 
