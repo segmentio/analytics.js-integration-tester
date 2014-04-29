@@ -20,6 +20,7 @@
     "component/assert": "*"
   },
   "main": "lib/index.js",
+  "remotes": ["https://raw.githubusercontent.com/"],
   "scripts": [
     "lib/index.js",
     "lib/assertion.js",
