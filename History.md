@@ -1,4 +1,10 @@
 
+0.2.1 / 2014-04-29 
+==================
+
+ * component: add https://raw.githubusercontent.com/ to remotes
+ * add .mapping(name) method
+
 0.2.0 / 2014-04-12 
 ==================
 
