@@ -17,6 +17,7 @@ describe('integration-tester', function () {
     .global('global')
     .option('option', 'value')
     .option('object', {})
+    .mapping('map')
     .assumesPageview()
     .readyOnLoad();
 
@@ -26,6 +27,7 @@ describe('integration-tester', function () {
       .global('global')
       .option('option', 'value')
       .option('object', {})
+      .mapping('map')
       .assumesPageview()
       .readyOnLoad();
   });
