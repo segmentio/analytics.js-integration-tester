@@ -41,6 +41,16 @@ describe('integration-tester', function () {
     assert(tester.types.page);
   })
 
+  describe('.initialize()', function(){
+    it('should return the value', function(){
+      Integration.prototype.initialize = Function('return 1');
+      var integration = new Integration;
+      integration.initialize(); // noop
+      var assertion = tester(integration).initialize();
+      assert(1 == assertion.ret);
+    })
+  })
+
   describe('.identify(id, traits)', function(){
     var integration;
 
