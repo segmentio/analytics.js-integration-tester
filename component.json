@@ -12,11 +12,11 @@
     "ianstormtaylor/is": "*",
     "component/each": "*",
     "ianstormtaylor/sinon": "*",
+    "segmentio/analytics.js-integration": "*",
     "jkroso/equals": "*",
     "yields/fmt": "*"
   },
   "development": {
-    "segmentio/analytics.js-integration": "*",
     "component/assert": "*"
   },
   "main": "lib/index.js",

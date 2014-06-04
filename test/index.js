@@ -32,6 +32,18 @@ describe('integration-tester', function () {
       .readyOnLoad();
   });
 
+  it('should not allow overriding of private methods', function(){
+    var integration = new Integration();
+    integration.queue = function(){};
+    var error;
+    try {
+      tester(integration)
+    } catch (err) {
+      error = err;
+    }
+    assert(error);
+  });
+
   it('should expose facade\'s methods on .types', function(){
     assert(tester.types);
     assert(tester.types.identify);
