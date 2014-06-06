@@ -1,16 +1,21 @@
 
-0.2.2 / 2014-05-07 
+0.2.3 / 2014-06-06
+==================
+
+ * adds check for unintentional overrides, fixes #4
+
+0.2.2 / 2014-05-07
 ==================
 
  * fix assertion.ret in .initialize()
 
-0.2.1 / 2014-04-29 
+0.2.1 / 2014-04-29
 ==================
 
  * component: add https://raw.githubusercontent.com/ to remotes
  * add .mapping(name) method
 
-0.2.0 / 2014-04-12 
+0.2.0 / 2014-04-12
 ==================
 
  * keep returned value
