@@ -4,7 +4,10 @@
   "description": "Helper to quickly test an analytics.js integration.",
   "version": "0.2.3",
   "license": "MIT",
-  "keywords": ["integration", "tester"],
+  "keywords": [
+    "integration",
+    "tester"
+  ],
   "dependencies": {
     "segmentio/facade": "*",
     "component/assert": "*",
@@ -20,7 +23,9 @@
     "component/assert": "*"
   },
   "main": "lib/index.js",
-  "remotes": ["https://raw.githubusercontent.com/"],
+  "remotes": [
+    "https://raw.githubusercontent.com/"
+  ],
   "scripts": [
     "lib/index.js",
     "lib/assertion.js",
