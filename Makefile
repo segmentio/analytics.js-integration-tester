@@ -1,11 +1,8 @@
 
-SRC= $(wildcard lib/*.js)
+SRC= $(wildcard lib/*.js test/index.js)
 
-build: components $(SRC)
-	@component build --dev
-
-components: component.json
-	@component install --dev
+build: $(SRC)
+	@duo --development test/index.js build/build.js
 
 clean:
 	@rm -fr build components

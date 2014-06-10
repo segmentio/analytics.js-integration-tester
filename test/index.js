@@ -1,17 +1,18 @@
 
+
 describe('integration-tester', function () {
 
-  var createIntegration = require('integration');
-  var tester = require('integration-tester');
+  var createIntegration = require('analytics.js-integration');
+  var tester = require('../lib');
   var Assertion = tester.Assertion;
   var assert = require('assert');
   var facade = require('facade');
   var Identify = facade.Identify;
+  var spy = require('spy');
   var Track = facade.Track;
   var Group = facade.Group;
   var Alias = facade.Alias;
   var Page = facade.Page;
-  var sinon = require('sinon');
 
   var Integration = createIntegration('Name')
     .global('global')
@@ -69,12 +70,12 @@ describe('integration-tester', function () {
     beforeEach(function(){
       if (integration) integration.identify.reset();
       integration = new Integration;
-      integration.identify = sinon.spy();
+      integration.identify = spy();
     })
 
     it('should call #identify on integration with Identify', function(){
       tester(integration).identify('my id', { trait: true });
-      integration.identify.calledWithNew(Identify);
+      assert(integration.identify.args[0][0] instanceof Identify);
     })
 
     it('should call integration with correct Identify', function(){
@@ -98,12 +99,12 @@ describe('integration-tester', function () {
     beforeEach(function(){
       if (integration) integration.group.reset();
       integration = new Integration;
-      integration.group = sinon.spy();
+      integration.group = spy();
     })
 
     it('should call #group on integration with Group', function(){
       tester(integration).group('my id', { trait: true });
-      integration.group.calledWithNew(Identify);
+      assert(integration.group.args[0][0] instanceof Group);
     })
 
     it('should call integration with correct Identify', function(){
@@ -127,7 +128,7 @@ describe('integration-tester', function () {
     beforeEach(function(){
       if (integration) integration.track.reset();
       integration = new Integration;
-      integration.track = sinon.spy();
+      integration.track = spy();
     })
 
     it('should call #track on integration with Track', function(){
@@ -157,7 +158,7 @@ describe('integration-tester', function () {
     beforeEach(function(){
       if (integration) integration.alias.reset();
       integration = new Integration;
-      integration.alias = sinon.spy();
+      integration.alias = spy();
     })
 
     it('should call #alias on integration with Alias', function(){
@@ -187,7 +188,7 @@ describe('integration-tester', function () {
     beforeEach(function(){
       if (integration) integration.page.reset();
       integration = new Integration;
-      integration.page = sinon.spy();
+      integration.page = spy();
     })
 
     it('should call #page on integration with Page', function(){
@@ -216,7 +217,7 @@ describe('integration-tester', function () {
 
     beforeEach(function(){
       integration = new Integration;
-      integration.initialize = sinon.spy();
+      integration.initialize = spy();
     })
 
     it('should call initialize', function(){
@@ -234,19 +235,19 @@ describe('integration-tester', function () {
 
     describe('.called()', function(){
       it('should throw if spy wasnt called', function(){
-        var spy = sinon.spy(function(){});
+        var s = spy(function(){});
 
         try {
-          assertion.called(spy);
+          assertion.called(s);
           assert(false);
         } catch (e) {
-          assert(~e.message.indexOf('"proxy"'));
+          assert(~e.message.indexOf('"spy"'));
           assert(~e.message.indexOf('Expected'));
         }
       })
 
       it('should save spy and return assertion', function(){
-        var proxy = sinon.spy(function(){});
+        var proxy = spy(function(){});
         proxy();
         assert(proxy == assertion.called(proxy).spy)
       })
@@ -263,7 +264,7 @@ describe('integration-tester', function () {
       })
 
       it('should throw if provided arguments are incorrect', function(){
-        var proxy = sinon.spy(function(){});
+        var proxy = spy(function(){});
         proxy('foo');
 
         try {
@@ -278,7 +279,7 @@ describe('integration-tester', function () {
       })
 
       it('should not throw and delete the spy if assertion is correct', function(){
-        var proxy = sinon.spy(function(){});
+        var proxy = spy(function(){});
         proxy('baz');
         var ret = assertion.called(proxy).with('baz');
         assert(!assertion.hasOwnProperty('spy'));

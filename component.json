@@ -9,23 +9,20 @@
     "tester"
   ],
   "dependencies": {
-    "segmentio/facade": "*",
+    "segmentio/facade": "duo",
     "component/assert": "*",
     "component/indexof": "*",
     "ianstormtaylor/is": "*",
     "component/each": "*",
-    "ianstormtaylor/sinon": "*",
     "segmentio/analytics.js-integration": "*",
     "jkroso/equals": "*",
     "yields/fmt": "*"
   },
   "development": {
+    "segmentio/spy": "*",
     "component/assert": "*"
   },
   "main": "lib/index.js",
-  "remotes": [
-    "https://raw.githubusercontent.com/"
-  ],
   "scripts": [
     "lib/index.js",
     "lib/assertion.js",
