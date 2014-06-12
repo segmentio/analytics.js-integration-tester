@@ -20,11 +20,13 @@
     "yields/fmt": "*"
   },
   "development": {
-    "component/assert": "*"
+
   },
   "main": "lib/index.js",
   "remotes": [
-    "https://raw.githubusercontent.com/"
+    "https://raw.githubusercontent.com/",
+    "https://cdn.rawgit.com",
+    "https://rawgit.com"
   ],
   "scripts": [
     "lib/index.js",
