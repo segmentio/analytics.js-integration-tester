@@ -1,5 +1,5 @@
 
-describe('integration-tester', function () {
+describe('integration-tester', function(){
 
   var createIntegration = require('integration');
   var tester = require('integration-tester');
@@ -252,10 +252,10 @@ describe('integration-tester', function () {
       })
     })
 
-    describe('.with()', function(){
+    describe('.args()', function(){
       it('should throw if theres no spy', function(){
         try {
-          assertion.with();
+          assertion.args();
           assert(false);
         } catch (e) {
           assert(~e.message.indexOf('.called(spy)'));
@@ -269,7 +269,7 @@ describe('integration-tester', function () {
         try {
           assertion
           .called(proxy)
-          .with('baz');
+          .args('baz');
           assert(false);
         } catch (e) {
           assert(~e.message.indexOf('"baz"'));
@@ -280,7 +280,7 @@ describe('integration-tester', function () {
       it('should not throw and delete the spy if assertion is correct', function(){
         var proxy = sinon.spy(function(){});
         proxy('baz');
-        var ret = assertion.called(proxy).with('baz');
+        var ret = assertion.called(proxy).args('baz');
         assert(!assertion.hasOwnProperty('spy'));
         assert(ret == assertion);
       })
