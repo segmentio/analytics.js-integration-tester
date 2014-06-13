@@ -9,7 +9,7 @@
     "tester"
   ],
   "dependencies": {
-    "segmentio/facade": "duo",
+    "segmentio/facade": "*",
     "component/assert": "*",
     "component/indexof": "*",
     "ianstormtaylor/is": "*",
