@@ -225,6 +225,23 @@ describe('integration-tester', function(){
     })
   })
 
+  describe('.deepEqual()', function(){
+    it('should throw if the values are not deep equal', function(){
+      try {
+        var integration = new Integration;
+        tester(integration).deepEqual({}, { baz: true });
+        assert(false);
+      } catch (e) {
+        assert(e);
+      }
+    })
+
+    it('should not throw if the values are deep equal', function(){
+      var integration = new Integration;
+      tester(integration).deepEqual({}, {});
+    })
+  })
+
   describe('Assertion', function(){
     var assertion;
 
@@ -285,49 +302,6 @@ describe('integration-tester', function(){
         assert(ret == assertion);
       })
     })
-
-    describe('.changed()', function(){
-      it('should throw if from isnt eql to to', function(){
-        try {
-          assertion.changed({}, { baz: true });
-          assert(false);
-        } catch (e) {
-          assert(~e.message.indexOf('Expected'));
-          assert(~e.message.indexOf('to'));
-        }
-      })
-
-      it('should save from', function(){
-        var obj = {};
-        assertion.changed(obj);
-        assert(obj == assertion.from);
-      })
-
-      it('should return assertion and delete .from', function(){
-        assertion.changed({ baz: true}, { baz: true });
-        assert(!assertion.hasOwnProperty('from'));
-      })
-    })
-
-    describe('.to()', function(){
-      it('should throw if theres no from', function(){
-        try {
-          assertion.to({});
-          assert(false);
-        } catch (e) {
-          assert(~e.message.indexOf('.changed('));
-        }
-      })
-
-      it('should work with .changed()', function(){
-        var obj = {};
-        assertion
-        .changed(obj)
-        .to(obj);
-      })
-    })
   })
-
-
 
 });

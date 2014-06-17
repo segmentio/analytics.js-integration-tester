@@ -9,18 +9,18 @@
     "tester"
   ],
   "dependencies": {
-    "segmentio/facade": "*",
     "component/assert": "*",
+    "component/each": "*",
     "component/indexof": "*",
     "ianstormtaylor/is": "*",
-    "component/each": "*",
-    "segmentio/analytics.js-integration": "*",
     "jkroso/equals": "*",
+    "matthewp/keys": "*",
+    "segmentio/analytics.js-integration": "*",
+    "segmentio/facade": "*",
     "yields/fmt": "*"
   },
   "development": {
-    "segmentio/spy": "*",
-    "component/assert": "*"
+    "segmentio/spy": "*"
   },
   "main": "lib/index.js",
   "scripts": [
