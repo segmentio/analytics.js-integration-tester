@@ -1,4 +1,12 @@
 
+1.1.0 / 2014-06-18
+==================
+
+ * added deepEqual, didNotCall, returned, didNotReturn, assert
+ * refactor away assertion, and add spy methods
+ * fix makefile for testing
+ * update readme
+
 1.0.0 / 2014-06-12
 ==================
 
