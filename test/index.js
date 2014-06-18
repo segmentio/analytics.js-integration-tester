@@ -156,10 +156,10 @@ describe('integration-tester', function(){
     });
   });
 
-  describe('#didntCall', function(){
+  describe('#didNotCall', function(){
     it('should throw if the spy does not exist', function(){
       assert.throws(function(){
-        test.didntCall(noop);
+        test.didNotCall(noop);
       });
     });
 
@@ -168,14 +168,14 @@ describe('integration-tester', function(){
       test.spy(obj, 'method');
       obj.method();
       assert.throws(function(){
-        test.didntCall(obj.method);
+        test.didNotCall(obj.method);
       });
     });
 
     it('should not throw is the spy was not called', function(){
       var obj = { method: noop };
       test.spy(obj, 'method');
-      test.didntCall(obj.method);
+      test.didNotCall(obj.method);
     });
 
     it('should throw if the spy was called with the right arguments', function(){
@@ -183,7 +183,7 @@ describe('integration-tester', function(){
       test.spy(obj, 'method');
       obj.method('a');
       assert.throws(function(){
-        test.didntCall(obj.method, 'a');
+        test.didNotCall(obj.method, 'a');
       });
     });
 
@@ -191,7 +191,7 @@ describe('integration-tester', function(){
       var obj = { method: noop };
       test.spy(obj, 'method');
       obj.method('a');
-      test.didntCall(obj.method, 'b');
+      test.didNotCall(obj.method, 'b');
     });
   });
 
@@ -219,10 +219,10 @@ describe('integration-tester', function(){
     });
   });
 
-  describe('#didntReturn', function(){
+  describe('#didNotReturn', function(){
     it('should throw if the spy does not exist', function(){
       assert.throws(function(){
-        test.didntReturn(noop);
+        test.didNotReturn(noop);
       });
     });
 
@@ -231,7 +231,7 @@ describe('integration-tester', function(){
       test.spy(obj, 'method');
       obj.method();
       assert.throws(function(){
-        test.didntReturn(obj.method, 1);
+        test.didNotReturn(obj.method, 1);
       });
     });
 
@@ -239,7 +239,7 @@ describe('integration-tester', function(){
       var obj = { method: noop };
       test.spy(obj, 'method');
       obj.method();
-      test.didntReturn(obj.method, 'a');
+      test.didNotReturn(obj.method, 'a');
     });
   });
 
