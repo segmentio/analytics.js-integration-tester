@@ -1,18 +1,21 @@
 
 describe('integration-tester', function(){
 
-  var createIntegration = require('analytics.js-integration');
-  var tester = require('../lib');
-  var Assertion = tester.Assertion;
   var assert = require('assert');
+  var createIntegration = require('analytics.js-integration');
   var facade = require('facade');
-  var Identify = facade.Identify;
+  var noop = function(){};
   var spy = require('spy');
-  var Track = facade.Track;
-  var Group = facade.Group;
-  var Alias = facade.Alias;
-  var Page = facade.Page;
+  var tester = require('../lib');
 
+  var Alias = facade.Alias;
+  var Group = facade.Group;
+  var Identify = facade.Identify;
+  var Page = facade.Page;
+  var Track = facade.Track;
+
+  var integration;
+  var test;
   var Integration = createIntegration('Name')
     .global('global')
     .option('option', 'value')
@@ -21,9 +24,13 @@ describe('integration-tester', function(){
     .assumesPageview()
     .readyOnLoad();
 
+  beforeEach(function(){
+    integration = new Integration;
+    test = tester(integration);
+  });
+
   it('should work', function () {
-    var integration = new Integration();
-    tester(integration)
+    test
       .global('global')
       .option('option', 'value')
       .option('object', {})
@@ -33,275 +40,207 @@ describe('integration-tester', function(){
   });
 
   it('should not allow overriding of private methods', function(){
-    var integration = new Integration();
     integration.queue = function(){};
-    var error;
-    try {
-      tester(integration)
-    } catch (err) {
-      error = err;
-    }
-    assert(error);
+    assert.throws(function(){
+      tester(integration);
+    });
   });
 
-  it('should expose facade\'s methods on .types', function(){
+  it('should expose facade methods as .types', function(){
     assert(tester.types);
     assert(tester.types.identify);
     assert(tester.types.group);
     assert(tester.types.track);
     assert(tester.types.alias);
     assert(tester.types.page);
-  })
+  });
 
-  describe('.initialize()', function(){
-    it('should return the value', function(){
-      Integration.prototype.initialize = Function('return 1');
-      var integration = new Integration;
-      integration.initialize(); // noop
-      var assertion = tester(integration).initialize();
-      assert(1 == assertion.ret);
-    })
-  })
+  describe('#name', function(){
+    it('should throw if the name does not match', function(){
+      assert.throws(function(){
+        test.name('Not');
+      });
+    });
 
-  describe('.identify(id, traits)', function(){
-    var integration;
+    it('should not throw if the name matches', function(){
+      test.name('Name');
+    });
+  });
 
-    beforeEach(function(){
-      if (integration) integration.identify.reset();
-      integration = new Integration;
+  describe('#global', function(){
+    it('should throw if the global does not exist', function(){
+      assert.throws(function(){
+        test.global('not');
+      });
+    });
+
+    it('should not throw if the global exists', function(){
+      test.global('global');
+    });
+  });
+
+  describe('#option', function(){
+    it('should throw if the option does not exist', function(){
+      assert.throws(function(){
+        test.option('not', false);
+      });
+    });
+
+    it('should throw if the option\'s default does not match', function(){
+      assert.throws(function(){
+        test.option('option', true);
+      });
+    });
+
+    it('should not throw if the option\'s default matches', function(){
+      test.option('option', 'value');
+    });
+  });
+
+  describe('#mapping', function(){
+    it('should throw if the mapping does not exist', function(){
+      assert.throws(function(){
+        test.mapping('not');
+      });
+    });
+
+    it('shuold not throw if the mapping exists', function(){
+      test.mapping('map');
+    });
+  });
+
+  describe('#spy', function(){
+    it('should spy on a method of a host object', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      assert.notEqual(obj.method, noop);
+    });
+  });
+
+  describe('#called', function(){
+    it('should throw if the spy was not called', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      assert.throws(function(){
+        test.called(obj.method);
+      });
+    });
+
+    it('should not throw if the spy was called', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method();
+      test.called(obj.method);
+    });
+
+    it('should throw if the spy was not called with the right arguments', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method('a');
+      assert.throws(function(){
+        test.called(obj.method, 'b');
+      });
+    });
+
+    it('should not throw if the spy was called with the right arguments', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method('a');
+      test.called(obj.method, 'a');
+    });
+  });
+
+  describe('#initialize', function(){
+    it('should call #initialize on the integration', function(){
+      integration.initialize = spy();
+      tester(integration).initialize();
+      assert(integration.initialize.called);
+    });
+  });
+
+  describe('#set', function(){
+    it('should set an option on an integration', function(){
+      test.set('option', 'a');
+      assert.equal('a', integration.options.option);
+    });
+  });
+
+  describe('#alias', function(){
+    it('should call #alias on the integration with an Alias facade', function(){
+      integration.alias = spy();
+      test.alias('id');
+      var alias = integration.alias.args[0][0];
+      assert(alias instanceof Alias);
+      assert('id' == alias.userId());
+    });
+  });
+
+  describe('#identify', function(){
+    it('should call #identify on the integration with an Identify facade', function(){
       integration.identify = spy();
-    })
-
-    it('should call #identify on integration with Identify', function(){
-      tester(integration).identify('my id', { trait: true });
-      assert(integration.identify.args[0][0] instanceof Identify);
-    })
-
-    it('should call integration with correct Identify', function(){
-      tester(integration).identify('baz', { trait: true });
+      test.identify('id', { trait: true });
       var identify = integration.identify.args[0][0];
       assert(identify instanceof Identify);
-      assert('baz' == identify.userId());
+      assert('id' == identify.userId());
       assert(true == identify.traits().trait);
-    })
+    });
+  });
 
-    it('should keep the returned value on `.ret`', function(){
-      integration.identify = Function('return 1');
-      var assertion = tester(integration).identify('baz', { trait: true });
-      assert(1 == assertion.ret);
-    })
-  })
-
-  describe('.group(id, traits)', function(){
-    var integration;
-
-    beforeEach(function(){
-      if (integration) integration.group.reset();
-      integration = new Integration;
+  describe('#group', function(){
+    it('should call #group on the integration with a Group facade', function(){
       integration.group = spy();
-    })
-
-    it('should call #group on integration with Group', function(){
-      tester(integration).group('my id', { trait: true });
-      assert(integration.group.args[0][0] instanceof Group);
-    })
-
-    it('should call integration with correct Identify', function(){
-      tester(integration).group('baz', { prop: true });
+      test.group('id', { trait: true });
       var group = integration.group.args[0][0];
       assert(group instanceof Group);
-      assert('baz' == group.groupId());
-      assert(true == group.properties().prop);
-    })
+      assert('id' == group.groupId());
+      assert(true == group.traits().trait);
+    });
+  });
 
-    it('should keep the returned value on `.ret`', function(){
-      integration.group = Function('return 1');
-      var assertion = tester(integration).group('baz', { trait: true });
-      assert(1 == assertion.ret);
-    })
-  })
+  describe('#page', function(){
+    it('should call #page on the integration with a Page facade', function(){
+      integration.page = spy();
+      test.page('category', 'name', { property: true });
+      var page = integration.page.args[0][0];
+      assert(page instanceof Page);
+      assert('name' == page.name());
+      assert('category' == page.category());
+      assert(true == page.properties().property);
+    });
+  });
 
-  describe('.track(event, props)', function(){
-    var integration;
-
-    beforeEach(function(){
-      if (integration) integration.track.reset();
-      integration = new Integration;
+  describe('#track', function(){
+    it('should call #track on the integration with a Track facade', function(){
       integration.track = spy();
-    })
-
-    it('should call #track on integration with Track', function(){
-      tester(integration).track('event', { prop: true });
-      assert(integration.track.args[0][0] instanceof Track);
-    })
-
-    it('should call integration with correct Identify', function(){
-      tester(integration).track('event', { prop: true });
+      test.track('event', { property: true });
       var track = integration.track.args[0][0];
       assert(track instanceof Track);
       assert('event' == track.event());
-      assert(true == track.properties().prop);
-    })
+      assert(true == track.properties().property);
+    });
+  });
 
-    it('should keep the returned value on `.ret`', function(){
-      integration.track = Function('return 1');
-      var assertion = tester(integration).track('event', { prop: true });
-      assert(1 == assertion.ret);
-    })
-  })
+  describe('#equal', function(){
+    it('should throw if the values are not equal', function(){
+      assert.throws(function(){
+        test.equal('a', 'b');
+      });
+    });
 
+    it('should not throw if the values are equal', function(){
+      test.equal('a', 'a');
+    });
+  });
 
-  describe('.alias(from, to)', function(){
-    var integration;
-
-    beforeEach(function(){
-      if (integration) integration.alias.reset();
-      integration = new Integration;
-      integration.alias = spy();
-    })
-
-    it('should call #alias on integration with Alias', function(){
-      tester(integration).alias('from', 'to');
-      assert(integration.alias.args[0][0] instanceof Alias);
-    })
-
-    it('should call integration with correct Alias', function(){
-      tester(integration).alias('from', 'to');
-      var alias = integration.alias.args[0][0];
-      assert(alias instanceof Alias);
-      assert('from' == alias.to());
-      assert('to' == alias.from());
-    })
-
-    it('should keep the returned value on `.ret`', function(){
-      integration.alias = Function('return 1');
-      var assertion = tester(integration).alias('1', '2');
-      assert(1 == assertion.ret);
-    })
-  })
-
-
-  describe('.page(category, name, properties)', function(){
-    var integration;
-
-    beforeEach(function(){
-      if (integration) integration.page.reset();
-      integration = new Integration;
-      integration.page = spy();
-    })
-
-    it('should call #page on integration with Page', function(){
-      tester(integration).page();
-      assert(integration.page.args[0][0] instanceof Page);
-    })
-
-    it('should call integration with correct Page', function(){
-      tester(integration).page('category', 'name', {});
-      var page = integration.page.args[0][0];
-      assert(page instanceof Page);
-      assert('category' == page.category());
-      assert('name' == page.name());
-      assert('object' == typeof page.properties());
-    })
-
-    it('should keep the returned value on `.ret`', function(){
-      integration.page = Function('return 1');
-      var assertion = tester(integration).page();
-      assert(1 == assertion.ret);
-    })
-  })
-
-  describe('.initialize()', function(){
-    var integration;
-
-    beforeEach(function(){
-      integration = new Integration;
-      integration.initialize = spy();
-    })
-
-    it('should call initialize', function(){
-      tester(integration).initialize();
-      assert(integration.initialize.called);
-    })
-  })
-
-  describe('.deepEqual()', function(){
+  describe('#deepEqual', function(){
     it('should throw if the values are not deep equal', function(){
-      try {
-        var integration = new Integration;
-        tester(integration).deepEqual({}, { baz: true });
-        assert(false);
-      } catch (e) {
-        assert(e);
-      }
-    })
+      assert.throws(function(){
+        test.deepEqual({}, { baz: true });
+      });
+    });
 
     it('should not throw if the values are deep equal', function(){
-      var integration = new Integration;
-      tester(integration).deepEqual({}, {});
-    })
-  })
-
-  describe('Assertion', function(){
-    var assertion;
-
-    beforeEach(function(){
-      assertion = new Assertion;
-    })
-
-    describe('.called()', function(){
-      it('should throw if spy wasnt called', function(){
-        var s = spy(function(){});
-
-        try {
-          assertion.called(s);
-          assert(false);
-        } catch (e) {
-          assert(~e.message.indexOf('"spy"'));
-          assert(~e.message.indexOf('Expected'));
-        }
-      })
-
-      it('should save spy and return assertion', function(){
-        var proxy = spy(function(){});
-        proxy();
-        assert(proxy == assertion.called(proxy).spy)
-      })
-    })
-
-    describe('.args()', function(){
-      it('should throw if theres no spy', function(){
-        try {
-          assertion.args();
-          assert(false);
-        } catch (e) {
-          assert(~e.message.indexOf('.called(spy)'));
-        }
-      })
-
-      it('should throw if provided arguments are incorrect', function(){
-        var proxy = spy(function(){});
-        proxy('foo');
-
-        try {
-          assertion
-          .called(proxy)
-          .args('baz');
-          assert(false);
-        } catch (e) {
-          assert(~e.message.indexOf('"baz"'));
-          assert(~e.message.indexOf('"foo"'));
-        }
-      })
-
-      it('should not throw and delete the spy if assertion is correct', function(){
-        var proxy = spy(function(){});
-        proxy('baz');
-        var ret = assertion.called(proxy).args('baz');
-        assert(!assertion.hasOwnProperty('spy'));
-        assert(ret == assertion);
-      })
-    })
-  })
-
+      test.deepEqual({}, {});
+    });
+  });
 });

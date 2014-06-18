@@ -17,15 +17,12 @@
     "matthewp/keys": "*",
     "segmentio/analytics.js-integration": "*",
     "segmentio/facade": "*",
+    "segmentio/spy": "*",
     "yields/fmt": "*"
-  },
-  "development": {
-    "segmentio/spy": "*"
   },
   "main": "lib/index.js",
   "scripts": [
     "lib/index.js",
-    "lib/assertion.js",
     "lib/types.js"
   ]
 }
