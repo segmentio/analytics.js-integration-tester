@@ -118,6 +118,12 @@ describe('integration-tester', function(){
   });
 
   describe('#called', function(){
+    it('should throw if the spy does not exist', function(){
+      assert.throws(function(){
+        test.called(noop);
+      });
+    });
+
     it('should throw if the spy was not called', function(){
       var obj = { method: noop };
       test.spy(obj, 'method');
@@ -147,6 +153,93 @@ describe('integration-tester', function(){
       test.spy(obj, 'method');
       obj.method('a');
       test.called(obj.method, 'a');
+    });
+  });
+
+  describe('#didntCall', function(){
+    it('should throw if the spy does not exist', function(){
+      assert.throws(function(){
+        test.didntCall(noop);
+      });
+    });
+
+    it('should throw if the spy was called', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method();
+      assert.throws(function(){
+        test.didntCall(obj.method);
+      });
+    });
+
+    it('should not throw is the spy was not called', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      test.didntCall(obj.method);
+    });
+
+    it('should throw if the spy was called with the right arguments', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method('a');
+      assert.throws(function(){
+        test.didntCall(obj.method, 'a');
+      });
+    });
+
+    it('should not throw if the spy was called with the wrong arguments', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method('a');
+      test.didntCall(obj.method, 'b');
+    });
+  });
+
+  describe('#returned', function(){
+    it('should throw if the spy does not exist', function(){
+      assert.throws(function(){
+        test.returned(noop);
+      });
+    });
+
+    it('should throw if the spy did not return the value', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method();
+      assert.throws(function(){
+        test.returned(obj.method, 'a');
+      });
+    });
+
+    it('should not throw if the spy returned the value', function(){
+      var obj = { method: function(){ return 1; }};
+      test.spy(obj, 'method');
+      obj.method();
+      test.returned(obj.method, 1);
+    });
+  });
+
+  describe('#didntReturn', function(){
+    it('should throw if the spy does not exist', function(){
+      assert.throws(function(){
+        test.didntReturn(noop);
+      });
+    });
+
+    it('should throw if the spy returned the value', function(){
+      var obj = { method: function(){ return 1; }};
+      test.spy(obj, 'method');
+      obj.method();
+      assert.throws(function(){
+        test.didntReturn(obj.method, 1);
+      });
+    });
+
+    it('should not throw if the spy did not return the value', function(){
+      var obj = { method: noop };
+      test.spy(obj, 'method');
+      obj.method();
+      test.didntReturn(obj.method, 'a');
     });
   });
 
@@ -217,6 +310,18 @@ describe('integration-tester', function(){
       assert(track instanceof Track);
       assert('event' == track.event());
       assert(true == track.properties().property);
+    });
+  });
+
+  describe('#assert', function(){
+    it('should throw with a falsey value', function(){
+      assert.throws(function(){
+        test.assert(false);
+      });
+    });
+
+    it('should not throw with a truthy value', function(){
+      test.assert(true);
     });
   });
 
