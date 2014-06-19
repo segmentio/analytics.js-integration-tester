@@ -1,4 +1,10 @@
 
+1.2.0 / 2014-06-18
+==================
+
+ * add `store`, `restore`, and `stub`, and pass analytics object in
+ * add test server
+
 1.1.0 / 2014-06-18
 ==================
 
