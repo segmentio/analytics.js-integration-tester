@@ -20,6 +20,9 @@
     "segmentio/spy": "*",
     "yields/fmt": "*"
   },
+  "development": {
+    "segmentio/analytics.js": "*"
+  },
   "main": "lib/index.js",
   "scripts": [
     "lib/index.js",
