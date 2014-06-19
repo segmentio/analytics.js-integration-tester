@@ -260,7 +260,7 @@ describe('integration-tester', function(){
 
   describe('#initialize', function(){
     it('should automatically call #initialize if it assumesPageview', function(){
-      integration._assumesPageView = true;
+      integration._assumesPageview = true;
       integration.initialize = spy();
       tester(integration);
       assert(integration.initialize.called);
