@@ -2,6 +2,7 @@
 describe('integration-tester', function(){
 
   var assert = require('assert');
+  var analytics = require('analytics.js');
   var createIntegration = require('analytics.js-integration');
   var facade = require('facade');
   var noop = function(){};
@@ -21,12 +22,11 @@ describe('integration-tester', function(){
     .option('option', 'value')
     .option('object', {})
     .mapping('map')
-    .assumesPageview()
     .readyOnLoad();
 
   beforeEach(function(){
     integration = new Integration;
-    test = tester(integration);
+    test = tester(integration, analytics);
   });
 
   it('should work', function () {
@@ -35,7 +35,6 @@ describe('integration-tester', function(){
       .option('option', 'value')
       .option('object', {})
       .mapping('map')
-      .assumesPageview()
       .readyOnLoad();
   });
 
@@ -114,6 +113,22 @@ describe('integration-tester', function(){
       var obj = { method: noop };
       test.spy(obj, 'method');
       assert.notEqual(obj.method, noop);
+    });
+  });
+
+  describe('#stub', function(){
+    it('should stub a method of a host object', function(){
+      var obj = { method: noop };
+      test.stub(obj, 'method');
+      assert.notEqual(obj.method, noop);
+      assert.equal(typeof obj.method, 'function');
+    });
+
+    it('should restore a stubbed method', function(){
+      var obj = { method: noop };
+      test.stub(obj, 'method');
+      test.restore(obj, 'method');
+      assert.deepEqual(obj.method, noop);
     });
   });
 
@@ -244,6 +259,13 @@ describe('integration-tester', function(){
   });
 
   describe('#initialize', function(){
+    it('should automatically call #initialize if it assumesPageview', function(){
+      integration._assumesPageView = true;
+      integration.initialize = spy();
+      tester(integration);
+      assert(integration.initialize.called);
+    });
+
     it('should call #initialize on the integration', function(){
       integration.initialize = spy();
       tester(integration).initialize();
@@ -255,6 +277,31 @@ describe('integration-tester', function(){
     it('should set an option on an integration', function(){
       test.set('option', 'a');
       assert.equal('a', integration.options.option);
+    });
+  });
+
+  describe('#store', function(){
+    it('should identify a user', function(){
+      test.store('user', 'id', { traits: true });
+      assert.equal('id', test.analytics.user().id());
+      assert.equal(true, test.analytics.user().traits().traits);
+    });
+
+    it('should identify a group', function(){
+      test.store('group', 'id', { traits: true });
+      assert.equal('id', test.analytics.group().id());
+      assert.equal(true, test.analytics.group().traits().traits);
+    });
+  });
+
+  describe('#group', function(){
+    it('should call #group on the integration with a Group facade', function(){
+      integration.group = spy();
+      test.group('id', { trait: true });
+      var group = integration.group.args[0][0];
+      assert(group instanceof Group);
+      assert('id' == group.groupId());
+      assert(true == group.traits().trait);
     });
   });
 
@@ -276,17 +323,6 @@ describe('integration-tester', function(){
       assert(identify instanceof Identify);
       assert('id' == identify.userId());
       assert(true == identify.traits().trait);
-    });
-  });
-
-  describe('#group', function(){
-    it('should call #group on the integration with a Group facade', function(){
-      integration.group = spy();
-      test.group('id', { trait: true });
-      var group = integration.group.args[0][0];
-      assert(group instanceof Group);
-      assert('id' == group.groupId());
-      assert(true == group.traits().trait);
     });
   });
 
