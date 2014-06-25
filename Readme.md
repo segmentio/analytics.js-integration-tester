@@ -1,9 +1,7 @@
 
 # analytics.js-integration-tester
 
-  A helper to easily test an [Analytics.js](https://github.com/segmentio/analytics.js) [integration](https://github.com/segmentio/analytics.js-integration).
-
-  It works similarly to how [`supertest`](https://github.com/visionmedia/supertest) works for [Superagent](https://github.com/visionmedia/superagent). It basically wraps an existing `integration` instance in helpers methods that do the actual asserting logic for you under the covers, so that your tests are cleaner to write.
+  An plugin to easily test an [Analytics.js](https://github.com/segmentio/analytics.js) [integration](https://github.com/segmentio/analytics.js-integration).
 
 ## Installation
 
@@ -24,56 +22,39 @@ module.exports = createIntegration('Custom')
   You can easily assert that all of those properties are there with a familiar API, like so:
 
 ```js
-var assert = require('integration-tester');
-var Integration = require('./integration');
-var integration = new Integration();
+var Analytics = require('analytics.js');
+var tester = require('integration-tester');
+var plugin = require('./integration');
+var Custom = plugin.Integration;
+var analytics = new Analytics;
+var custom = new Custom;
+analytics.use(tester);
+analytics.add(custom);
 
-assert(integration)
-  .name('Custom')
+var Test = createIntegration('Custom')
   .readyOnInitialize()
   .global('_custom')
   .option('apiKey', '')
   .option('track', false);
+
+analytics.validate(Custom, Test);
 ```
 
   You can also use the tracking and spying methods to quickly test cases:
 
 ```js
-assert(integration)
-  .spy(window, '_custom')
-  .track('Event', { property: true })
-  .called(window._custom, 'Event', { property: true });
+analytics.stub(window, '_custom');
+analytics.track('Event', { property: true });
+analytics.called(window._custom, 'Event', { property: true });
 ```
+
+  The general pattern we use is to `stub` the methods in a `beforeEach` test block, then call an `analytics` method (track, page, identify, etc.), and then check if some other internal method got called with the correct arguments using `analytics.called(method, args...)`.
 
 ## API
 
-### name(name)
+### validate(integration, testIntegration)
 
-  Assert that the integration's name is `string`.
-
-### option(key, value)
-
-  Assert that the integration has an option `key` with a default `value`.
-
-### mapping(key)
-
-  Assert that the integration has a mapping option named `key`.
-
-### global(key)
-
-  Assert that the integration has a global `key`.
-
-### assumesPageview()
-
-  Assert that the integration assumes a pageview.
-
-### readyOnInitialize()
-
-  Assert that the integration is ready on initialize.
-
-### readyOnLoad()
-
-  Assert that the integration is ready on load.
+  Assert that an integration is correctly defined, that it matches the `testIntegration`'s options, globals, configuration, and name.
 
 ### spy(object, method)
  
@@ -107,11 +88,7 @@ assert(integration)
   
   Reset the tester. This will call `reset` on the integration, as well as restore all existing spies.
 
-### set(option, value)
-
-  Set an `option` on an integration to `value`.
-
-### load(callback)
+### load(integration, callback)
 
   Assert that the integration `load` method can load the library, and that `loaded` properly checks for the libraries existence, then `callback(err)`.
 
