@@ -5,6 +5,8 @@
 
 var indexOf = require('indexof');
 var assert = require('assert');
+var domify = require('domify');
+var query = require('query');
 var stub = require('stub');
 var each = require('each');
 var keys = require('keys');
@@ -312,6 +314,23 @@ function plugin(analytics) {
     });
     analytics.initialize();
     analytics.page();
+  };
+
+  /**
+   * Assert an element has been added to the DOM and loaded.
+   *
+   * @param {String} str
+   */
+  
+  analytics.loaded = function(str){
+    var el = domify(str);
+    var tag = el.tagName.toLowerCase();
+    var src = el.src;
+    var sel = fmt('%s[src="%s"]', tag, src);
+    assert(
+      !!query(sel), 
+      fmt('Expected <%s src="%s"> to be in the DOM.', tag, src)
+    );
   };
 
   /**

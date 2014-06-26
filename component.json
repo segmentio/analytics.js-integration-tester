@@ -10,8 +10,10 @@
   ],
   "dependencies": {
     "component/assert": "*",
+    "component/domify": "*",
     "component/each": "*",
     "component/indexof": "*",
+    "component/query": "*",
     "jkroso/equals": "*",
     "matthewp/keys": "*",
     "segmentio/spy": "*",

@@ -2,6 +2,7 @@
 var createIntegration = require('analytics.js-integration');
 var Analytics = require('analytics.js').constructor;
 var assert = require('assert');
+var domify = require('domify');
 var facade = require('facade');
 var tester = require('../');
 
@@ -217,6 +218,38 @@ describe('integration-tester', function(){
 
     it('should not throw if the values are deep equal', function(){
       analytics.deepEqual({}, {});
+    });
+  });
+
+  describe('#loaded', function(){
+    describe('img tag', function(){
+      it('should throw if it does not find an img tag', function(){
+        var str = '<img src="http://example.com/example.png"/>';
+        assert.throws(function(){
+          analytics.loaded(str);
+        });
+      });
+
+      it('should not throw if it does find an img tag', function(){
+        var str = '<img src="http://example.com/example.png"/>';
+        document.body.appendChild(domify(str));
+        analytics.loaded(str);
+      });
+    });
+
+    describe('script tag', function(){
+      it('should throw if it does not find a script tag', function(){
+        var str = '<script src="http://example.com/example.js"></script>';
+        assert.throws(function(){
+          analytics.loaded(str);
+        });
+      });
+
+      it('should not throw if it does find a script tag', function(){
+        var str = '<script src="http://example.com/example.js"></script>';
+        document.body.appendChild(domify(str));
+        analytics.loaded(str);
+      });
     });
   });
 });
