@@ -18,6 +18,7 @@
     "matthewp/keys": "*",
     "segmentio/spy": "*",
     "segmentio/stub": "*",
+    "timoxley/next-tick": "*",
     "yields/fmt": "*"
   },
   "development": {

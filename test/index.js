@@ -223,33 +223,43 @@ describe('integration-tester', function(){
 
   describe('#loaded', function(){
     describe('img tag', function(){
-      it('should throw if it does not find an img tag', function(){
+      it('should throw if it does not find an img tag', function(done){
         var str = '<img src="http://example.com/example.png"/>';
-        assert.throws(function(){
-          analytics.loaded(str);
+        analytics.loaded(str, function(err){
+          assert(err);
+          done();
         });
       });
 
-      it('should not throw if it does find an img tag', function(){
+      it('should not throw if it does find an img tag', function(done){
         var str = '<img src="http://example.com/example.png"/>';
         document.body.appendChild(domify(str));
-        analytics.loaded(str);
+        analytics.loaded(str, done);
       });
     });
 
     describe('script tag', function(){
-      it('should throw if it does not find a script tag', function(){
+      it('should throw if it does not find a script tag', function(done){
         var str = '<script src="http://example.com/example.js"></script>';
-        assert.throws(function(){
-          analytics.loaded(str);
+        analytics.loaded(str, function(err){
+          assert(err);
+          done();
         });
       });
 
-      it('should not throw if it does find a script tag', function(){
+      it('should not throw if it does find a script tag', function(done){
         var str = '<script src="http://example.com/example.js"></script>';
         document.body.appendChild(domify(str));
-        analytics.loaded(str);
+        analytics.loaded(str, done);
       });
+    });
+
+    it('should support many', function(done){
+      var a = '<img src="http://example.com/example2.png"/>';
+      var b = '<script src="http://example.com/example2.js"></script>';
+      document.body.appendChild(domify(a));
+      document.body.appendChild(domify(b));
+      analytics.loaded(a, b, done);
     });
   });
 });
