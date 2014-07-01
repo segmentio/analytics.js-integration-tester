@@ -78,7 +78,7 @@ function plugin(analytics) {
 
   analytics.called = function(spy){
     assert(
-      ~indexOf(this.spies, spy), 
+      ~indexOf(this.spies, spy),
       'You must call `.spy(object, method)` prior to calling `.called()`.'
     );
     assert(spy.called, fmt('Expected "%s" to have been called.', spy.name));
@@ -109,14 +109,14 @@ function plugin(analytics) {
   analytics.notCalled =
   analytics.didNotCall = function(spy){
     assert(
-      ~indexOf(this.spies, spy), 
+      ~indexOf(this.spies, spy),
       'You must call `.spy(object, method)` prior to calling `.didntCall()`.'
     );
 
     var args = [].slice.call(arguments, 1);
     if (!args.length) {
       assert(
-        !spy.called, 
+        !spy.called,
         fmt('Expected "%s" not to have been called.', spy.name)
       );
     } else {
@@ -262,7 +262,7 @@ function plugin(analytics) {
       assert.deepEqual(
         x[key], y[key],
         fmt(
-          'Expected option "%s" to default to "%s", but it defaults to "%s".', 
+          'Expected option "%s" to default to "%s", but it defaults to "%s".',
           key, y[key], x[key]
         )
       );
@@ -303,11 +303,11 @@ function plugin(analytics) {
    * @param {Integration} integration
    * @param {Function} done
    */
-  
+
   analytics.load = function(integration, done){
-    analytics.assert(!integration.loaded());
+    analytics.assert(!integration.loaded(), 'Expected `integration.loaded()` to be false before loading.');
     analytics.once('ready', function(){
-      analytics.assert(integration.loaded());
+      analytics.assert(integration.loaded(), 'Expected `integration.loaded()` to be true after loading.');
       done();
     });
     analytics.initialize();
@@ -321,10 +321,7 @@ function plugin(analytics) {
    * @return {Tester}
    */
 
-  analytics.assert = function(value){
-    assert(value);
-    return this;
-  };
+  analytics.assert = assert;
 
   /**
    * Expose all of the methods on `assert`.
