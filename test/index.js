@@ -23,15 +23,13 @@ describe('integration-tester', function(){
     analytics.add(integration);
   });
 
-  it('should work', function(){
-    var Test = createIntegration('Name')
+  it('should compare two integrations', function(){
+    analytics.compare(Integration, createIntegration('Name')
       .global('global')
       .option('option', 'value')
       .option('object', {})
       .mapping('map')
-      .readyOnLoad();
-
-    analytics.validate(Integration, Test);
+      .readyOnLoad());
   });
 
   describe('#spy', function(){
