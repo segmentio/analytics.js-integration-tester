@@ -52,7 +52,7 @@ analytics.called(window._custom, 'Event', { property: true });
 
 ## API
 
-### validate(integration, testIntegration)
+### compare(integration, testIntegration)
 
   Assert that an integration is correctly defined, that it matches the `testIntegration`'s options, globals, configuration, and name.
 
