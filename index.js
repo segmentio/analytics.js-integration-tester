@@ -106,7 +106,6 @@ function plugin(analytics) {
    * @return {Analytics}
    */
 
-  analytics.notCalled =
   analytics.didNotCall = function(spy){
     assert(
       ~indexOf(this.spies, spy),
@@ -209,7 +208,6 @@ function plugin(analytics) {
    * @return {Tester}
    */
 
-  analytics.notReturned =
   analytics.didNotReturn = function(spy, value){
     assert(
       ~indexOf(this.spies, spy),
@@ -236,13 +234,15 @@ function plugin(analytics) {
   };
 
   /**
-   * Validate `int` against `test`.
+   * Compare `int` against `test`.
+   *
+   * To double-check that they have the right defaults, globals, and config.
    *
    * @param {Function} a actual integration constructor
    * @param {Function} b test integration constructor
    */
 
-  analytics.validate = function(a, b){
+  analytics.compare = function(a, b){
     a = new a;
     b = new b;
     // name
