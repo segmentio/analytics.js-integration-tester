@@ -1,4 +1,9 @@
 
+1.3.2 / 2014-07-02
+==================
+
+ * rename validate to compare, rename notCalled to didNotCall
+
 1.3.1 / 2014-07-01
 ==================
  
