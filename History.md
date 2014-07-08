@@ -1,4 +1,10 @@
 
+1.3.3 / 2014-07-08
+==================
+
+ * default in marketo on .page call in load
+ * rename validate to compare in readme
+
 1.3.2 / 2014-07-02
 ==================
 
