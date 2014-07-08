@@ -109,7 +109,7 @@ function plugin(analytics) {
   analytics.didNotCall = function(spy){
     assert(
       ~indexOf(this.spies, spy),
-      'You must call `.spy(object, method)` prior to calling `.didntCall()`.'
+      'You must call `.spy(object, method)` prior to calling `.didNotCall()`.'
     );
 
     var args = [].slice.call(arguments, 1);
@@ -211,7 +211,7 @@ function plugin(analytics) {
   analytics.didNotReturn = function(spy, value){
     assert(
       ~indexOf(this.spies, spy),
-      'You must call `.spy(object, method)` prior to calling `.didntReturn()`.'
+      'You must call `.spy(object, method)` prior to calling `.didNotReturn()`.'
     );
     assert(
       !spy.returned(value),
@@ -311,7 +311,7 @@ function plugin(analytics) {
       done();
     });
     analytics.initialize();
-    analytics.page();
+    analytics.page({}, { Marketo: true });
   };
 
   /**
