@@ -10,12 +10,15 @@
   ],
   "dependencies": {
     "component/assert": "*",
+    "component/domify": "*",
     "component/each": "*",
     "component/indexof": "*",
+    "component/query": "*",
     "jkroso/equals": "*",
     "matthewp/keys": "*",
     "segmentio/spy": "*",
     "segmentio/stub": "*",
+    "timoxley/next-tick": "*",
     "yields/fmt": "*"
   },
   "development": {
