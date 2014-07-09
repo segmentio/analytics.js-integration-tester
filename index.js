@@ -5,11 +5,13 @@
 
 var indexOf = require('indexof');
 var assert = require('assert');
+var domify = require('domify');
 var stub = require('stub');
 var each = require('each');
 var keys = require('keys');
 var fmt = require('fmt');
 var spy = require('spy');
+var is = require('is');
 
 /**
  * Expose `plugin`.
@@ -315,6 +317,72 @@ function plugin(analytics) {
   };
 
   /**
+   * Assert a script, image, or iframe was loaded.
+   *
+   * @param {String} str DOM template
+   */
+  
+  analytics.loaded = function(integration, str){
+    if ('string' == typeof integration) {
+      str = integration;
+      integration = this.integration();
+    }
+
+    var tags = [];
+
+    assert(
+      ~indexOf(this.spies, integration.loads),
+      'You must call `.spy(integration, \'loads\')` prior to calling `.loaded()`.'
+    );
+
+    // collect all Image or HTMLElement objects
+    // in an array of stringified elements, for human-readable assertions.
+    each(integration.loads.returns, function(el){
+      var tag = {};
+      if (el instanceof Image) {
+        tag.type = 'img';
+        tag.attrs = { src: el.src };
+      } else if (is.element(el)) {
+        tag.type = el.tagName.toLowerCase();
+        tag.attrs = attributes(el);
+        switch (tag.type) {
+          case 'script':
+            // don't care about these properties.
+            delete tag.attrs.type;
+            delete tag.attrs.async;
+            delete tag.attrs.defer;
+            break;
+        }
+      }
+      if (tag.type) tags.push(stringify(tag.type, tag.attrs));
+    });
+
+    // normalize formatting
+    var tag = objectify(str);
+    var expected = stringify(tag.type, tag.attrs);
+
+    if (!tags.length) {
+      assert(false, fmt('No tags were returned.\nExpected %s.', expected));
+    } else {
+      // show the closest match
+      assert(
+        indexOf(tags, expected) !== -1,
+        fmt('\nExpected %s.\nFound %s', expected, tags.join('\n'))
+      );
+    }
+  };
+
+  /**
+   * Get current integration.
+   *
+   * @return {Integration}
+   */
+  
+  analytics.integration = function(){
+    for (var name in this._integrations) return this._integrations[name];
+  };
+
+  /**
    * Assert a `value` is truthy.
    *
    * @param {Mixed} value
@@ -337,4 +405,61 @@ function plugin(analytics) {
       return this;
     };
   });
+
+  /**
+   * Create a DOM node string.
+   */
+
+  function stringify(name, attrs) {
+    var str = [];
+    str.push('<' + name);
+    each(attrs, function(key, val){
+      str.push(' ' + key + '="' + val + '"');
+    });
+    str.push('>');
+    // block
+    if ('img' !== name) str.push('</' + name + '>');
+    return str.join('');
+  }
+
+  /**
+   * DOM node attributes as object.
+   *
+   * @param {Element}
+   * @return {Object}
+   */
+  
+  function attributes(node) {
+    var obj = {};
+    each(node.attributes, function(attr){
+      obj[attr.name] = attr.value;
+    });
+    return obj;
+  }
+
+  /**
+   * Given a string, give back DOM attributes.
+   *
+   * @param {String} str
+   * @return {Object}
+   */
+
+  function objectify(str) {
+    // replace `src` with `data-src` to prevent image loading
+    str = str.replace(' src="', ' data-src="');
+    
+    var el = domify(str);
+    var attrs = {};
+    
+    each(el.attributes, function(attr){
+      // then replace it back
+      var name = 'data-src' == attr.name ? 'src' : attr.name;
+      attrs[name] = attr.value;
+    });
+    
+    return {
+      type: el.tagName.toLowerCase(),
+      attrs: attrs
+    };
+  }
 }

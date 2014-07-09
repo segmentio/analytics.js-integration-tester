@@ -217,4 +217,47 @@ describe('integration-tester', function(){
       analytics.deepEqual({}, {});
     });
   });
+
+  describe('#loaded', function(){
+    beforeEach(function(){
+      Integration.tag('example-img', '<img src="http://example.com/{{name}}.png">')
+      Integration.tag('example-script', '<script src="http://ajax.googleapis.com/ajax/libs/jquery/{{version}}/jquery.min.js"></script>');
+      analytics = new Analytics;
+      integration = new Integration;
+      analytics.use(tester);
+      analytics.add(integration);
+      analytics.spy(integration, 'loads');
+    });
+
+    describe('img tag', function(){
+      it('should throw if it does not find an img tag', function(){
+        assert.throws(function(){
+          analytics.loaded('<img src="http://example.com/example.png"/>');
+        });
+      });
+ 
+      it('should not throw if it does find an Image', function(){
+        integration.loads('example-img', { name: 'example' });
+        analytics.loaded('<img src="http://example.com/example.png"/>');
+      });
+    });
+ 
+    describe('script tag', function(){
+      it('should throw if it does not find a script tag', function(){
+        assert.throws(function(){
+          analytics.loaded('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>');
+        });
+      });
+ 
+      it('should not throw if it does find a script tag', function(){
+        integration.loads('example-script', { version: '1.11.1' });
+        analytics.loaded('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>');
+      });
+    });
+
+    it('should accept integration argument', function(){
+      integration.loads('example-img', { name: 'example' });
+      analytics.loaded(integration, '<img src="http://example.com/example.png"/>');
+    });
+  });
 });
