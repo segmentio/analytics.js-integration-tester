@@ -10,8 +10,10 @@
   ],
   "dependencies": {
     "component/assert": "*",
+    "component/domify": "*",
     "component/each": "*",
     "component/indexof": "*",
+    "ianstormtaylor/is": "*",
     "jkroso/equals": "*",
     "matthewp/keys": "*",
     "segmentio/spy": "*",
@@ -20,7 +22,7 @@
   },
   "development": {
     "segmentio/analytics.js": "*",
-    "segmentio/analytics.js-integration": "*",
+    "segmentio/analytics.js-integration": "add/tags",
     "segmentio/facade": "*"
   },
   "main": "index.js",
