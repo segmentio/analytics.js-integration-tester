@@ -331,13 +331,13 @@ function plugin(analytics) {
     var tags = [];
 
     assert(
-      ~indexOf(this.spies, integration.loads),
-      'You must call `.spy(integration, \'loads\')` prior to calling `.loaded()`.'
+      ~indexOf(this.spies, integration.load),
+      'You must call `.spy(integration, \'load\')` prior to calling `.loaded()`.'
     );
 
     // collect all Image or HTMLElement objects
     // in an array of stringified elements, for human-readable assertions.
-    each(integration.loads.returns, function(el){
+    each(integration.load.returns, function(el){
       var tag = {};
       if (el instanceof Image) {
         tag.type = 'img';

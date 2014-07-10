@@ -226,7 +226,7 @@ describe('integration-tester', function(){
       integration = new Integration;
       analytics.use(tester);
       analytics.add(integration);
-      analytics.spy(integration, 'loads');
+      analytics.spy(integration, 'load');
     });
 
     describe('img tag', function(){
@@ -237,7 +237,7 @@ describe('integration-tester', function(){
       });
  
       it('should not throw if it does find an Image', function(){
-        integration.loads('example-img', { name: 'example' });
+        integration.load('example-img', { name: 'example' });
         analytics.loaded('<img src="http://example.com/example.png"/>');
       });
     });
@@ -250,13 +250,13 @@ describe('integration-tester', function(){
       });
  
       it('should not throw if it does find a script tag', function(){
-        integration.loads('example-script', { version: '1.11.1' });
+        integration.load('example-script', { version: '1.11.1' });
         analytics.loaded('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>');
       });
     });
 
     it('should accept integration argument', function(){
-      integration.loads('example-img', { name: 'example' });
+      integration.load('example-img', { name: 'example' });
       analytics.loaded(integration, '<img src="http://example.com/example.png"/>');
     });
   });
