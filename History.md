@@ -1,4 +1,9 @@
 
+1.4.0 / 2014-07-11
+==================
+
+ * add `.loaded` method to check that `integration.load` returned a script/img/iframe matching a certain pattern.
+
 1.3.3 / 2014-07-08
 ==================
 

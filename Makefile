@@ -11,7 +11,7 @@ URL = http://localhost:4203
 # Targets.
 #
 
-build/build.js: node_modules $(shell find lib) test/index.js
+build/build.js: node_modules component.json index.js test/index.js
 	@$(DUO) --development test/index.js build/build.js
 
 node_modules: package.json
