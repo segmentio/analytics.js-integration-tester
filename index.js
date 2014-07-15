@@ -339,7 +339,7 @@ function plugin(analytics) {
     // in an array of stringified elements, for human-readable assertions.
     each(integration.load.returns, function(el){
       var tag = {};
-      if (el instanceof Image) {
+      if (el instanceof HTMLImageElement) {
         tag.type = 'img';
         tag.attrs = { src: el.src };
       } else if (is.element(el)) {
