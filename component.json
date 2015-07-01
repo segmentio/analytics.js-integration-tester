@@ -21,7 +21,7 @@
     "yields/fmt": "*"
   },
   "development": {
-    "segmentio/analytics.js": "*",
+    "segmentio/analytics.js-core": "*",
     "segmentio/analytics.js-integration": "0.3.x",
     "segmentio/facade": "*"
   },

@@ -1,6 +1,6 @@
 
 var createIntegration = require('analytics.js-integration');
-var Analytics = require('analytics.js').constructor;
+var Analytics = require('analytics.js-core').constructor;
 var assert = require('assert');
 var facade = require('facade');
 var tester = require('../');
