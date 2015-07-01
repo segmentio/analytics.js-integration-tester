@@ -1,41 +1,64 @@
-
 #
-# Target args.
+# Binaries.
 #
 
-PID = test/server/pid.txt
 DUO = node_modules/.bin/duo
-URL = http://localhost:4203
+DUOT = node_modules/.bin/duo-test
 
 #
-# Targets.
+# Files.
 #
 
-build/build.js: node_modules component.json index.js test/index.js
-	@$(DUO) --development test/index.js build/build.js
+SRCS = index.js
+TESTS = test/index.test.js
 
-node_modules: package.json
+#
+# Program arguments.
+#
+
+DUOT_ARGS = --commands "make build.js"
+
+#
+# Chore targets.
+#
+
+# Install node dependencies.
+node_modules: package.json $(wildcard node_modules/*/package.json)
 	@npm install
+	@touch node_modules
 
-#
-# Commands.
-#
-
+# Remove local/built files.
 clean:
-	@rm -fr build components node_modules
-
-test: server build/build.js
-	@open $(URL)
-
-server: kill
-	@node test/server &> /dev/null &
-	@sleep 1
-
-kill:
-	@-test -e $(PID) \
-		&& kill `cat $(PID)` \
-		&& rm -f $(PID) \
-		||:
-
+	rm -fr build.js
 .PHONY: clean
-.PHONY: test
+
+# Remove local/built files and vendor files.
+distclean: clean
+	rm -rf components node_modules
+.PHONY: distclean
+
+#
+# Build targets.
+#
+
+# Build a test bundle.
+build.js: node_modules component.json $(SRCS) $(TESTS)
+	@$(DUO) --development --stdout $(TESTS) > build.js
+.DEFAULT_GOAL = build.js
+
+#
+# Test targets.
+#
+
+# Test locally in PhantomJS.
+test-phantomjs: node_modules build.js
+	@$(DUOT) -R spec $(DUOT_ARGS) phantomjs
+.PHONY: test-phantomjs
+
+# Test locally in a browser.
+test-browser: node_modules build.js
+	@$(DUOT) $(DUOT_ARGS) browser
+.PHONY: test-browser
+
+# Test shortcut.
+test: test-phantomjs

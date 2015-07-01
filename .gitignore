@@ -1,5 +1,4 @@
-components
-build
-node_modules
 *.log
-pid.txt
+build.js
+components
+node_modules

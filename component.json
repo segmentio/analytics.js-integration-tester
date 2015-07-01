@@ -2,7 +2,7 @@
   "name": "integration-tester",
   "repo": "segmentio/analytics.js-integration-tester",
   "description": "Helper to quickly test an analytics.js integration.",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "license": "MIT",
   "keywords": [
     "integration",
@@ -22,7 +22,7 @@
   },
   "development": {
     "segmentio/analytics.js-core": "*",
-    "segmentio/analytics.js-integration": "0.3.x",
+    "segmentio/analytics.js-integration": "^1.0.0",
     "segmentio/facade": "*"
   },
   "main": "index.js",

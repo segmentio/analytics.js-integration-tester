@@ -1,4 +1,9 @@
 
+1.4.2 / 2015-06-30
+==================
+
+ * Replace analytics.js dependency with analytics.js-core
+
 1.4.1 / 2014-07-14
 ==================
 

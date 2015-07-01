@@ -2,8 +2,10 @@
   "name": "integration-tester",
   "private": true,
   "devDependencies": {
+    "duo": "^0.12.3",
+    "duo-test": "^0.4.1",
     "express": "~3.1.0",
-    "duo": "^0.1.0",
-    "mocha": "^1.20.1"
+    "mocha": "^1.20.1",
+    "phantomjs": "^1.9.17"
   }
 }
