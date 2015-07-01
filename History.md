@@ -3,6 +3,7 @@
 ==================
 
  * Replace analytics.js dependency with analytics.js-core
+ * Update test harness and support tasks
 
 1.4.1 / 2014-07-14
 ==================
