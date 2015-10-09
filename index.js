@@ -47,11 +47,12 @@ function plugin(analytics) {
    *
    * @param {Object} object
    * @param {String} method
+   * @param {Function} fn A function to be called in place of the stubbed method.
    * @return {Analytics}
    */
 
-  analytics.stub = function(object, method){
-    var s = stub(object, method);
+  analytics.stub = function(object, method, fn){
+    var s = stub(object, method, fn);
     this.spies.push(s);
     return this;
   };
