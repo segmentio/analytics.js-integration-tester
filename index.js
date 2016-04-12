@@ -159,7 +159,7 @@ function plugin(analytics) {
    * @return {Analytics}
    */
 
-  analytics.calledThrice = calledTimes(2);
+  analytics.calledThrice = calledTimes(3);
 
   /**
    * Generate a function for asserting a spy
