@@ -23,7 +23,7 @@
   "development": {
     "segmentio/analytics.js-core": "*",
     "segmentio/analytics.js-integration": "^1.0.0",
-    "segmentio/facade": "*"
+    "segmentio/facade": "^2.2.2"
   },
   "main": "index.js",
   "scripts": [
