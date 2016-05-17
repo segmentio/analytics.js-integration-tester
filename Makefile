@@ -1,64 +1,81 @@
-#
-# Binaries.
-#
+##
+# Binaries
+##
 
-DUO = node_modules/.bin/duo
-DUOT = node_modules/.bin/duo-test
+ESLINT := node_modules/.bin/eslint
+KARMA := node_modules/.bin/karma
 
-#
-# Files.
-#
+##
+# Files
+##
 
-SRCS = index.js
-TESTS = test/index.test.js
+LIBS = $(shell find lib -type f -name "*.js")
+TESTS = $(shell find test -type f -name "*.test.js")
+SUPPORT = $(wildcard karma.conf*.js)
+ALL_FILES = $(LIBS) $(TESTS) $(SUPPORT)
 
-#
-# Program arguments.
-#
+##
+# Program options/flags
+##
 
-DUOT_ARGS = --commands "make build.js"
+# A list of options to pass to Karma
+# Overriding this overwrites all options specified in this file (e.g. BROWSERS)
+KARMA_FLAGS ?=
 
-#
-# Chore targets.
-#
+# A list of Karma browser launchers to run
+# http://karma-runner.github.io/0.13/config/browsers.html
+BROWSERS ?=
+ifdef BROWSERS
+KARMA_FLAGS += --browsers $(BROWSERS)
+endif
 
-# Install node dependencies.
+ifdef CI
+KARMA_CONF ?= karma.conf.ci.js
+else
+KARMA_CONF ?= karma.conf.js
+endif
+
+# Mocha flags.
+GREP ?= .
+
+##
+# Tasks
+##
+
+# Install node modules.
 node_modules: package.json $(wildcard node_modules/*/package.json)
 	@npm install
-	@touch node_modules
+	@touch $@
 
-# Remove local/built files.
+# Install dependencies.
+install: node_modules
+
+# Remove temporary files and build artifacts.
 clean:
-	rm -fr build.js
+	rm -rf *.log coverage
 .PHONY: clean
 
-# Remove local/built files and vendor files.
+# Remove temporary files, build artifacts, and vendor dependencies.
 distclean: clean
-	rm -rf components node_modules
+	rm -rf node_modules
 .PHONY: distclean
 
-#
-# Build targets.
-#
+# Lint JavaScript source files.
+lint: install
+	@$(ESLINT) $(ALL_FILES)
+.PHONY: lint
 
-# Build a test bundle.
-build.js: node_modules component.json $(SRCS) $(TESTS)
-	@$(DUO) --development --stdout $(TESTS) > build.js
-.DEFAULT_GOAL = build.js
+# Attempt to fix linting errors.
+fmt: install
+	@$(ESLINT) --fix $(ALL_FILES)
+.PHONY: fmt
 
-#
-# Test targets.
-#
-
-# Test locally in PhantomJS.
-test-phantomjs: node_modules build.js
-	@$(DUOT) -R spec $(DUOT_ARGS) phantomjs
-.PHONY: test-phantomjs
-
-# Test locally in a browser.
-test-browser: node_modules build.js
-	@$(DUOT) $(DUOT_ARGS) browser
+# Run browser unit tests in a browser.
+test-browser: install
+	@$(KARMA) start $(KARMA_FLAGS) $(KARMA_CONF)
 .PHONY: test-browser
 
-# Test shortcut.
-test: test-phantomjs
+# Default test target.
+test: lint test-browser
+.PHONY: test
+.DEFAULT_GOAL = test
