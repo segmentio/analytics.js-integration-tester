@@ -1,3 +1,8 @@
+1.5.1 / 2016-05-23
+==================
+
+ * Replace wildcard dependency ranges with semver
+
 1.5.0 / 2016-05-05
 ==================
 
