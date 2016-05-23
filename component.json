@@ -9,7 +9,7 @@
     "tester"
   ],
   "dependencies": {
-    "component/assert": "^0.5.3",
+    "segmentio/assert": "^0.5.4",
     "component/domify": "^1.4.0",
     "component/each": "^0.2.6",
     "component/indexof": "^0.0.3",
