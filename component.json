@@ -14,7 +14,7 @@
     "component/each": "^0.2.6",
     "component/indexof": "^0.0.3",
     "ianstormtaylor/is": "^0.1.1",
-    "jkroso/equals": "1.0.2",
+    "segmentio/equals": "1.1.0",
     "matthewp/keys": "^0.0.3",
     "segmentio/spy": "^0.3.0",
     "segmentio/stub": "^0.1.1",
