@@ -26,11 +26,11 @@ module.exports = createIntegration('Custom')
 You can easily assert that all of those properties are there with a familiar API, like so:
 
 ```js
-var Analytics = require('analytics.js');
-var tester = require('integration-tester');
+var Analytics = require('@segment/analytics.js-core').constructor;
+var tester = require('@segment/analytics.js-integration-tester');
 var plugin = require('./integration');
 var Custom = plugin.Integration;
-var analytics = new Analytics;
+var analytics = new Analytics();
 var custom = new Custom;
 analytics.use(tester);
 analytics.add(custom);
