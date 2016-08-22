@@ -1,6 +1,6 @@
 {
   "name": "@segment/analytics.js-integration-tester",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Helper to quickly test an analytics.js integration.",
   "keywords": [
     "analytics.js",
