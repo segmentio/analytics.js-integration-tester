@@ -260,4 +260,52 @@ describe('integration-tester', function() {
       analytics.loaded(integration, '<img src="http://example.com/example.png"/>');
     });
   });
+
+  describe('#waitForScripts', function() {
+    beforeEach(function(done) {
+      // wait for anything that previous tests left pending
+      analytics.waitForScripts(done);
+    });
+
+    it('should callback immediately if no scripts are pending', function() {
+      var called = false;
+      analytics.waitForScripts(function() {
+        called = true;
+      });
+      assert(called);
+    });
+
+    it('should not callback before all scripts have finished loading', function(done) {
+      var script = document.createElement('script');
+      script.src='/base/test/static/setGlobal.js';
+      document.body.appendChild(script);
+      analytics.waitForScripts(function() {
+        document.body.removeChild(script);
+        assert(window.__setGlobal__ === 1);
+        return done();
+      });
+      window.__setGlobal__ = 0;
+    });
+
+    it('should call all callbacks once scripts have finished loading', function(done) {
+      var script = document.createElement('script');
+      script.src='/base/test/static/setGlobal.js';
+      document.body.appendChild(script);
+      var called = 0;
+      analytics.waitForScripts(function() {
+        assert(window.__setGlobal__ === 1);
+        called++;
+      });
+      analytics.waitForScripts(function() {
+        assert(window.__setGlobal__ === 1);
+        called++;
+        setTimeout(function() {
+          document.body.removeChild(script);
+          assert(called === 2);
+          done();
+        }, 100);
+      });
+      window.__setGlobal__ = 0;
+    });
+  });
 });

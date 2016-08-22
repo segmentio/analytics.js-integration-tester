@@ -4,7 +4,13 @@
 module.exports = function(config) {
   config.set({
     files: [
-      'test/**/*.test.js'
+      'test/**/*.test.js',
+      {
+        pattern: 'test/static/setGlobal.js',
+        included: false,
+        served: true,
+        nocache: true
+      }
     ],
 
     browsers: ['PhantomJS'],

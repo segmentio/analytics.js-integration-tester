@@ -97,7 +97,7 @@ Reset the tester. This will call `reset` on the integration, as well as restore 
 Assert that the integration `load` method can load the library, and that `loaded` properly checks for the libraries existence, then `callback(err)`.
 
 ### <method>(args...)
- 
+
 Call one of the core analytics methods on the integration with `args...`. The methods include: `alias`, `identify`, `group`, `page`, and `track`.
 
 ### assert(actual)
@@ -135,3 +135,17 @@ Assert that a `fn` throws an error.
 ### doesNotThrow(fn)
 
 Assert than a `fn` does not throw an error.
+
+### waitForScripts(callback)
+
+Waits for all script elements to finish loading before calling `callback`. Often scripts loaded onto the page will add other scripts in order to support their functionality. These scripts can reference globals that we clear after each test, causing them to fail if they load too late.
+
+```js
+afterEach(function(done) {
+  analytics.waitForScripts(function() {
+    myIntegration.reset();
+    analytics.reset();
+    done();
+  });
+});
+```
