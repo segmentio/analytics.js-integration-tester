@@ -222,6 +222,7 @@ describe('integration-tester', function() {
     beforeEach(function() {
       Integration.tag('example-img', '<img src="http://example.com/{{name}}.png">');
       Integration.tag('example-script', '<script src="http://ajax.googleapis.com/ajax/libs/jquery/{{version}}/jquery.min.js"></script>');
+      Integration.tag('example-iframe', '<iframe src="http://ad.doubleclick.net/activity;src=654757884637545;type=groupTag;cat=activityTag;ord=2700503028455676400?"></iframe>');
       analytics = new Analytics();
       integration = new Integration();
       analytics.use(tester);
@@ -252,6 +253,19 @@ describe('integration-tester', function() {
       it('should not throw if it does find a script tag', function() {
         integration.load('example-script', { version: '1.11.1' });
         analytics.loaded('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>');
+      });
+    });
+
+    describe('iframe tag', function() {
+      it('should throw if it does not find a iframe tag', function() {
+        assert['throws'](function() {
+          analytics.loaded('<iframe src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></iframe>');
+        });
+      });
+
+      it('should not throw if it does find a iframe tag', function() {
+        integration.load('example-iframe');
+        analytics.loaded('<iframe src="http://ad.doubleclick.net/activity;src=654757884637545;type=groupTag;cat=activityTag;ord=2700503028455676400?"></iframe>');
       });
     });
 
