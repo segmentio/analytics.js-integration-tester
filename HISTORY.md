@@ -1,10 +1,14 @@
 
+3.1.1 / 2017-03-03
+==================
+
+  * Fix IE bug with tag irrelevant attributes not being ignored
+
 3.1.0 / 2016-08-22
 ==================
 
   * add waitForScripts (#37)
   * update History.md
-
 
 3.0.0 / 2016-08-15
 ==================
