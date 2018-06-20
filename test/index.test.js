@@ -17,19 +17,22 @@ describe('integration-tester', function() {
     .readyOnLoad();
 
   beforeEach(function() {
-    analytics = new Analytics;
-    integration = new Integration;
+    analytics = new Analytics();
+    integration = new Integration();
     analytics.use(tester);
     analytics.add(integration);
   });
 
   it('should compare two integrations', function() {
-    analytics.compare(Integration, createIntegration('Name')
-      .global('global')
-      .option('option', 'value')
-      .option('object', {})
-      .mapping('map')
-      .readyOnLoad());
+    analytics.compare(
+      Integration,
+      createIntegration('Name')
+        .global('global')
+        .option('option', 'value')
+        .option('object', {})
+        .mapping('map')
+        .readyOnLoad()
+    );
   });
 
   describe('#spy', function() {
@@ -151,7 +154,11 @@ describe('integration-tester', function() {
     });
 
     it('should not throw if the spy returned the value', function() {
-      var obj = { method: function() { return 1; } };
+      var obj = {
+        method: function() {
+          return 1;
+        }
+      };
       analytics.spy(obj, 'method');
       obj.method();
       analytics.returned(obj.method, 1);
@@ -166,7 +173,11 @@ describe('integration-tester', function() {
     });
 
     it('should throw if the spy returned the value', function() {
-      var obj = { method: function() { return 1; } };
+      var obj = {
+        method: function() {
+          return 1;
+        }
+      };
       analytics.spy(obj, 'method');
       obj.method();
       assert['throws'](function() {
@@ -220,9 +231,18 @@ describe('integration-tester', function() {
 
   describe('#loaded', function() {
     beforeEach(function() {
-      Integration.tag('example-img', '<img src="http://example.com/{{name}}.png">');
-      Integration.tag('example-script', '<script src="http://ajax.googleapis.com/ajax/libs/jquery/{{version}}/jquery.min.js"></script>');
-      Integration.tag('example-iframe', '<iframe src="http://ad.doubleclick.net/activity;src=654757884637545;type=groupTag;cat=activityTag;ord=2700503028455676400?"></iframe>');
+      Integration.tag(
+        'example-img',
+        '<img src="http://example.com/{{name}}.png">'
+      );
+      Integration.tag(
+        'example-script',
+        '<script src="http://ajax.googleapis.com/ajax/libs/jquery/{{version}}/jquery.min.js"></script>'
+      );
+      Integration.tag(
+        'example-iframe',
+        '<iframe src="http://ad.doubleclick.net/activity;src=654757884637545;type=groupTag;cat=activityTag;ord=2700503028455676400?"></iframe>'
+      );
       analytics = new Analytics();
       integration = new Integration();
       analytics.use(tester);
@@ -246,32 +266,43 @@ describe('integration-tester', function() {
     describe('script tag', function() {
       it('should throw if it does not find a script tag', function() {
         assert['throws'](function() {
-          analytics.loaded('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>');
+          analytics.loaded(
+            '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>'
+          );
         });
       });
 
       it('should not throw if it does find a script tag', function() {
         integration.load('example-script', { version: '1.11.1' });
-        analytics.loaded('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>');
+        analytics.loaded(
+          '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>'
+        );
       });
     });
 
     describe('iframe tag', function() {
       it('should throw if it does not find a iframe tag', function() {
         assert['throws'](function() {
-          analytics.loaded('<iframe src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></iframe>');
+          analytics.loaded(
+            '<iframe src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></iframe>'
+          );
         });
       });
 
       it('should not throw if it does find a iframe tag', function() {
         integration.load('example-iframe');
-        analytics.loaded('<iframe src="http://ad.doubleclick.net/activity;src=654757884637545;type=groupTag;cat=activityTag;ord=2700503028455676400?"></iframe>');
+        analytics.loaded(
+          '<iframe src="http://ad.doubleclick.net/activity;src=654757884637545;type=groupTag;cat=activityTag;ord=2700503028455676400?"></iframe>'
+        );
       });
     });
 
     it('should accept integration argument', function() {
       integration.load('example-img', { name: 'example' });
-      analytics.loaded(integration, '<img src="http://example.com/example.png"/>');
+      analytics.loaded(
+        integration,
+        '<img src="http://example.com/example.png"/>'
+      );
     });
   });
 
@@ -291,7 +322,7 @@ describe('integration-tester', function() {
 
     it('should not callback before all scripts have finished loading', function(done) {
       var script = document.createElement('script');
-      script.src='/base/test/static/setGlobal.js';
+      script.src = '/base/test/static/setGlobal.js';
       document.body.appendChild(script);
       analytics.waitForScripts(function() {
         document.body.removeChild(script);
@@ -303,7 +334,7 @@ describe('integration-tester', function() {
 
     it('should call all callbacks once scripts have finished loading', function(done) {
       var script = document.createElement('script');
-      script.src='/base/test/static/setGlobal.js';
+      script.src = '/base/test/static/setGlobal.js';
       document.body.appendChild(script);
       var called = 0;
       analytics.waitForScripts(function() {
