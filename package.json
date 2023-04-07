@@ -28,7 +28,7 @@
     "@segment/spy": "^1.0.0",
     "@segment/stub": "^1.0.0",
     "component-type": "^1.2.1",
-    "domify": "^1.4.0",
+    "domify": "^1.4.1",
     "extend": "^3.0.0",
     "json3": "^3.3.2",
     "proclaim": "^3.4.1"
