@@ -3,6 +3,9 @@
 [![CircleCI](https://circleci.com/gh/segmentio/analytics.js-integration-tester.svg?style=shield&circle-token=0ac5c09784c18d17e17c2e522c880e1f5d971f1d)](https://circleci.com/gh/segmentio/analytics.js-integration-tester)
 [![Codecov](https://img.shields.io/codecov/c/github/segmentio/analytics.js-integration-tester/master.svg?maxAge=2592000)](https://codecov.io/gh/segmentio/analytics.js-integration-tester)
 
+> **Note**  
+> Segment has paused maintenance on this project, but may return it to an active status in the future. Issues and pull requests from external contributors are not being considered, although internal contributions may appear from time to time. The project remains available under its open source license for anyone to use.
+
 An plugin to easily test an [Analytics.js](https://github.com/segmentio/analytics.js) [integration](https://github.com/segmentio/analytics.js-integration).
 
 ## Installation
