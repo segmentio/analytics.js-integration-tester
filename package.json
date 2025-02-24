@@ -27,7 +27,7 @@
     "@segment/fmt": "^1.0.0",
     "@segment/spy": "^1.0.0",
     "@segment/stub": "^1.0.0",
-    "component-type": "^1.2.1",
+    "component-type": "^1.2.2",
     "domify": "^1.4.0",
     "extend": "^3.0.2",
     "json3": "^3.3.2",
